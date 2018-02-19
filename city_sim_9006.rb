@@ -6,8 +6,9 @@ if(s.arg == "QUIT")
   exit
 end
 drivers = []
+rng = Random.new(s.arg)
 for x in 1..5 do
-  drivers << Driver::new(x,s.arg)
+  drivers << Driver::new(x,rng)
 end
 for driver in drivers
   driver.driving

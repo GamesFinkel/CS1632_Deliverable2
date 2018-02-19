@@ -2,7 +2,7 @@ require_relative "City"
 class Driver
   attr_accessor :Name, :Location, :Books, :Dinos, :Classes, :Status
   def initialize number,seed
-    @Random = Random.new(seed)
+    @Random = seed
     @Number = number
     @Name = "Driver #{@Number}"
     @City = City.new
