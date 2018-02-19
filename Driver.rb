@@ -1,6 +1,6 @@
 require_relative "City"
 class Driver
-  attr_accessor :Name, :Location, :Books
+  attr_accessor :Name, :Location, :Books, :Dinos, :Classes
   def initialize number,rng
     @Number = number
     @Name = "Driver #{@Number}"
@@ -31,38 +31,46 @@ class Driver
       @Classes = @Classes * 2
     end
   end
+  def getRoad
+    if(@Location == "Hillman")
+      road = @City.Hillman.sample(random: @Random)
+    elsif(@Location == "Hospital")
+      road = @City.Hospital.sample(random: @Random)
+    elsif(@Location == "Cathedral")
+      road = @City.Cathedral.sample(random: @Random)
+    elsif(@Location == "Museum")
+      road = @City.Museum.sample(random: @Random)
+    end
+    road
+  end
+  def getNextLoc road
+    if(road.include?"St.")
+      if(@Location == "Hillman")
+        next_location = "Hospital"
+      elsif(@Location == "Hospital")
+        next_location = "Hillman"
+      elsif(@Location == "Cathedral")
+        next_location = "Museum"
+      elsif(@Location == "Museum")
+        next_location = "Cathedral"
+      end
+    elsif(road.include? "Ave.")
+      if(@Location=="Hillman")
+        next_location = "Downtown"
+      elsif(@Location == "Museum")
+        next_location = "Hillman"
+      elsif(@Location == "Hospital")
+        next_location = "Cathedral"
+      elsif(@Location == "Cathedral")
+        next_location = "Monroeville"
+      end
+    end
+    next_location
+  end
   def driving
     until @Location == "Downtown"||@Location == "Monroeville"
-      if(@Location == "Hillman")
-        road = @City.Hillman.sample(random: @Random)
-      elsif(@Location == "Hospital")
-        road = @City.Hospital.sample(random: @Random)
-      elsif(@Location == "Cathedral")
-        road = @City.Cathedral.sample(random: @Random)
-      elsif(@Location == "Museum")
-        road = @City.Museum.sample(random: @Random)
-      end
-      if(road.include?"St.")
-        if(@Location == "Hillman")
-          next_location = "Hospital"
-        elsif(@Location == "Hospital")
-          next_location = "Hillman"
-        elsif(@Location == "Cathedral")
-          next_location = "Museum"
-        elsif(@Location == "Museum")
-          next_location = "Cathedral"
-        end
-      elsif(road.include? "Ave.")
-        if(@Location=="Hillman")
-          next_location = "Downtown"
-        elsif(@Location == "Museum")
-          next_location = "Hillman"
-        elsif(@Location == "Hospital")
-          next_location = "Cathedral"
-        elsif(@Location == "Cathedral")
-          next_location = "Monroeville"
-        end
-      end
+      road = getRoad
+      next_location = getNextLoc(road)
         puts "#{@Name} heading from #{@Location} to #{next_location} via #{road}"
         @Location = next_location
         add_book
