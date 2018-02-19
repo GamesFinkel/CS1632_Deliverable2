@@ -1,18 +1,19 @@
 require_relative "City"
 class Driver
-  attr_accessor :Name, :Location, :Books, :Dinos, :Classes
-  def initialize number,rng
+  attr_accessor :Name, :Location, :Books, :Dinos, :Classes, :Status
+  def initialize number,seed
+    @Random = Random.new(seed)
     @Number = number
     @Name = "Driver #{@Number}"
     @City = City.new
-    @Location = @City.Locs.sample(random: rng)
+    @Location = @City.Locs.sample(random: @Random)
     @Books = 0
     @Dinos = 0
     @Classes = 1
+    @Status = "None"
     add_book
     add_dino
     attend_class
-    @Random = rng
     end
   def add_book
     if(@Location=="Hillman")
@@ -68,6 +69,9 @@ class Driver
     next_location
   end
   def driving
+    if(@Location =="Downtown"||@Location == "Monroeville")
+      @Status = "Double Jeopardy"
+    end
     until @Location == "Downtown"||@Location == "Monroeville"
       road = getRoad
       next_location = getNextLoc(road)
@@ -76,8 +80,6 @@ class Driver
         add_book
         add_dino
         attend_class
-
-
   end
   if(@Books==1)
     puts "#{@Name} obtained 1 book!"
